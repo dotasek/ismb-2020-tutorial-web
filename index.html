@@ -9,16 +9,16 @@
 </head>
 
 <body>
-  <p style="font-size:32px">Cytoscape Automation By JavaScript</p>
-  <p style="font-size:18px">Prerequisites</p>
+  <p style="font-size:32px;font-weight:bold">Cytoscape Automation By JavaScript</p>
+  <p style="font-size:18px;font-weight:bold">Prerequisites</p>
   <list>
     <li>An installed and running version of Cytoscape.</li>
     <li>An internet connection.</li>
     <li>An NDEx account.</li>
   </list>
-  <p style="font-size:18px">Step 1: Set Source Network</p>
+  <p style="font-size:18px;font-weight:bold">Step 1: Set Source Network</p>
   <form>
-    <label for="server-url">Network UUID:</label>
+    <label for="server-url">NDEx Server URL:</label>
     <input type="text" id="server-url" name="server-url" value=''><br><br>
     <label for="uuid">Network UUID:</label>
     <input type="text" id="uuid" name="uuid" value=''><br><br>
@@ -40,13 +40,12 @@
     }
   </script>
 
-  <p style="font-size:18px">Step 2: Check Network Summary</p>
+  <p style="font-size:18px;font-weight:bold">Step 2: Check Network Summary</p>
   <script type="text/javascript">
     // Use the NDEx javascript client to fetch the JSON summary of the network.
 
     function getNetworkSummary(serverUrl, uuid, accessKey) {
       var ndex = new ndexClient.NDEx(serverUrl);
-
       ndex.getStatus().then((response) => {
         var p = document.createElement('p');
         p.appendChild(document.createTextNode('Status: ' + response.message));
@@ -55,8 +54,6 @@
 
       ndex.getNetworkSummary(uuid,
         accessKey).then((response) => {
-          //var p = document.createElement('p2');
-          //p.appendChild(document.createTextNode('Network Summary: ' + JSON.stringify(response)));
           document.getElementById('network-summary').value = JSON.stringify(response, null, 2);
         });
     }
@@ -64,13 +61,14 @@
   <button
     onClick='getNetworkSummary(document.getElementById("server-url").value, document.getElementById("uuid").value, document.getElementById("access-key").value)'>Get
     Network Summary</button>
-  <br>
+  <br><br>
   <form>
     <label for="network-summary">Network Summary:</label><br>
     <textarea readonly id="network-summary" name="network-summary" rows="27" cols="60"></textarea>
     <br><br>
   </form>
-  <p style="font-size:18px">Step 3: Import network into Cytoscape</p>
+
+  <p style="font-size:18px;font-weight:bold">Step 3: Import network into Cytoscape</p>
   <script type="text/javascript">
     const CYREST_BASE_URL = 'http://127.0.0.1'
 
@@ -99,8 +97,5 @@
   <button
     onClick='importNetwork("1234", document.getElementById("server-url").value, document.getElementById("uuid").value, document.getElementById("access-key").value)'>Import
     to Cytoscape</button>
-
-
 </body>
-
 </html>
