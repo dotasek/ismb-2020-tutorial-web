@@ -18,7 +18,7 @@
 
   <script type="text/javascript">
 
-    var defaultServerUrl = 'http://dev.ndexbio.org/v2';
+    var defaultServerUrl = 'https://dev.ndexbio.org/v2';
     var defaultUuid = '9025e42a-9e3f-11e7-8676-06832d634f41';
     var defaultAccessKey = 'a93fa15fae6a6c087ec1e2b562deaac930c083ea4cb110110247f5e40f88d46a';
 
@@ -47,7 +47,7 @@
     const importNetwork = (cyRESTPort, serverUrl, uuid, accessKey) => {
 
       const cyRESTParams = {
-        serverUrl: 'http://dev.ndexbio.org/v2',
+        serverUrl: 'https://dev.ndexbio.org/v2',
         uuid: '9025e42a-9e3f-11e7-8676-06832d634f41',
         accessKey: 'a93fa15fae6a6c087ec1e2b562deaac930c083ea4cb110110247f5e40f88d46a'
       }
@@ -72,7 +72,6 @@
       document.getElementById("server-url").value = defaultServerUrl;
       document.getElementById("uuid").value = defaultUuid;
       document.getElementById("access-key").value = defaultAccessKey;
-      
     }
 
   </script>
