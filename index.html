@@ -3,24 +3,46 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>NDEx JS Library webpage</title>
+  <title>Cytoscape Automation By JavaScript</title>
   <script src="https://unpkg.com/ndex-client@0.0.2/dist/build/bundle.js"></script>
 
 </head>
 
 <body>
-  <div id="content"></div>
-
-  <!--Add buttons to initiate auth sequence and sign out-->
-  <button id="authorize-button" style="display: none;">Authorize</button>
-  <button id="signout-button" style="display: none;">Sign Out</button>
-  <button id="get-summary-button" style="display: none;">Get Network Summary</button>
+  <p style="font-size:32px">Cytoscape Automation By JavaScript</p>
+  <p style="font-size:18px">Prerequisites</p>
+  <list>
+    <li>An installed and running version of Cytoscape.</li>
+    <li>An internet connection.</li>
+    <li>An NDEx account.</li>
+  </list>
+  <p style="font-size:18px">Step 1: Set Source Network</p>
+  <form>
+    <label for="server-url">Network UUID:</label>
+    <input type="text" id="server-url" name="server-url" value=''><br><br>
+    <label for="uuid">Network UUID:</label>
+    <input type="text" id="uuid" name="uuid" value=''><br><br>
+    <label for="access-key">Access Key:</label>
+    <input type="text" id="access-key" name="access-key"><br><br>
+  </form>
 
   <script type="text/javascript">
+    //When the html page is finished loading, set some default values for the source network
+    window.onload = function () {
 
-    var defaultServerUrl = 'https://dev.ndexbio.org/v2';
-    var defaultUuid = '9025e42a-9e3f-11e7-8676-06832d634f41';
-    var defaultAccessKey = 'a93fa15fae6a6c087ec1e2b562deaac930c083ea4cb110110247f5e40f88d46a';
+      const defaultServerUrl = 'https://dev.ndexbio.org/v2';
+      const defaultUuid = '9025e42a-9e3f-11e7-8676-06832d634f41';
+      const defaultAccessKey = 'a93fa15fae6a6c087ec1e2b562deaac930c083ea4cb110110247f5e40f88d46a';
+
+      document.getElementById("server-url").value = defaultServerUrl;
+      document.getElementById("uuid").value = defaultUuid;
+      document.getElementById("access-key").value = defaultAccessKey;
+    }
+  </script>
+
+  <p style="font-size:18px">Step 2: Check Network Summary</p>
+  <script type="text/javascript">
+    // Use the NDEx javascript client to fetch the JSON summary of the network.
 
     function getNetworkSummary(serverUrl, uuid, accessKey) {
       var ndex = new ndexClient.NDEx(serverUrl);
@@ -32,22 +54,30 @@
       });
 
       ndex.getNetworkSummary(uuid,
-          accessKey).then((response) => {
+        accessKey).then((response) => {
           //var p = document.createElement('p2');
           //p.appendChild(document.createTextNode('Network Summary: ' + JSON.stringify(response)));
           document.getElementById('network-summary').value = JSON.stringify(response, null, 2);
         });
     }
-
-
-
-
+  </script>
+  <button
+    onClick='getNetworkSummary(document.getElementById("server-url").value, document.getElementById("uuid").value, document.getElementById("access-key").value)'>Get
+    Network Summary</button>
+  <br>
+  <form>
+    <label for="network-summary">Network Summary:</label><br>
+    <textarea readonly id="network-summary" name="network-summary" rows="27" cols="60"></textarea>
+    <br><br>
+  </form>
+  <p style="font-size:18px">Step 3: Import network into Cytoscape</p>
+  <script type="text/javascript">
     const CYREST_BASE_URL = 'http://127.0.0.1'
 
     const importNetwork = (cyRESTPort, serverUrl, uuid, accessKey) => {
 
       const cyRESTParams = {
-        serverUrl: serverUrl.replace('https', 'http'),
+        serverUrl: serverUrl,
         uuid: uuid,
         accessKey: accessKey
       }
@@ -65,34 +95,10 @@
         body: JSON.stringify(cyRESTParams)
       })
     }
-
-    window.onload = function () {
-      //when the document is finished loading, replace everything
-      //between the <a ...> </a> tags with the value of splitText
-      document.getElementById("server-url").value = defaultServerUrl;
-      document.getElementById("uuid").value = defaultUuid;
-      document.getElementById("access-key").value = defaultAccessKey;
-    }
-
   </script>
- 
-  <form>
-    <label for="server-url">Network UUID:</label>
-    <input type="text" id="server-url" name="server-url" value=''><br><br>
-    <label for="uuid">Network UUID:</label>
-    <input type="text" id="uuid" name="uuid" value=''><br><br>
-    <label for="access-key">Access Key:</label>
-    <input type="text" id="access-key" name="access-key"><br><br>
-  </form>
-  <button onClick='getNetworkSummary(document.getElementById("server-url").value, document.getElementById("uuid").value, document.getElementById("access-key").value)'>Get Network Summary</button>
-  <br>
-  <form>
-    <label for="network-summary">Network Summary:</label><br>
-    <textarea id="network-summary" name="network-summary" rows="27" cols="60"></textarea>
-    <br><br>
-  </form>
-  
-  <button onClick='importNetwork("1234", document.getElementById("server-url").value, document.getElementById("uuid").value, document.getElementById("access-key").value)'>Import to Cytoscape</button>
+  <button
+    onClick='importNetwork("1234", document.getElementById("server-url").value, document.getElementById("uuid").value, document.getElementById("access-key").value)'>Import
+    to Cytoscape</button>
 
 
 </body>
